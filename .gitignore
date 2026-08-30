@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+.evo/
+.playwright-cli/
+*.tsbuildinfo
+.DS_Store
+.local/scripts/

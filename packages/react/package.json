@@ -1,0 +1,56 @@
+{
+  "name": "@every-qrcode/react",
+  "version": "0.1.1",
+  "private": false,
+  "description": "A scannable React QR code component that grows into a deterministic 3D Tree or Terrain world.",
+  "keywords": [
+    "3d",
+    "qr-code",
+    "react",
+    "react-component",
+    "webgpu"
+  ],
+  "homepage": "https://github.com/AlbertAZ1992/every-qrcode#readme",
+  "bugs": {
+    "url": "https://github.com/AlbertAZ1992/every-qrcode/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlbertAZ1992/every-qrcode.git",
+    "directory": "packages/react"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@every-qrcode/core": "workspace:0.1.1",
+    "@every-qrcode/renderer-webgpu": "workspace:0.1.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  }
+}

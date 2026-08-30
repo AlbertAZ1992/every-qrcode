@@ -1,0 +1,34 @@
+{
+  "name": "every-qr-code",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic, scannable 3D QR code components for React and the web platform.",
+  "homepage": "https://every-qr-code-world.albertaz1992.workers.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlbertAZ1992/every-qrcode.git"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "pnpm build:packages && pnpm --filter @every-qrcode/demo build",
+    "build:packages": "pnpm --filter @every-qrcode/core build && pnpm --filter @every-qrcode/renderer-webgpu build && pnpm --filter @every-qrcode/react build && pnpm --filter @every-qrcode/web-component build",
+    "dev": "pnpm build:packages && pnpm --filter @every-qrcode/demo dev",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "lint": "oxlint --deny-warnings .",
+    "test": "pnpm build:packages && vitest run",
+    "typecheck": "pnpm build:packages && tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "oxfmt": "0.65.0",
+    "oxlint": "1.80.0",
+    "typescript": "7.0.2",
+    "vitest": "4.1.11"
+  },
+  "engines": {
+    "node": ">=22 <25",
+    "pnpm": ">=10"
+  },
+  "packageManager": "pnpm@10.26.0"
+}

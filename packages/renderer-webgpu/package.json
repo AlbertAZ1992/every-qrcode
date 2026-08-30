@@ -1,0 +1,45 @@
+{
+  "name": "@every-qrcode/renderer-webgpu",
+  "version": "0.1.1",
+  "private": false,
+  "description": "WebGPU Tree and Terrain renderer that morphs deterministic 3D worlds into QR codes.",
+  "keywords": [
+    "3d",
+    "qr-code",
+    "typescript",
+    "webgpu",
+    "wgsl"
+  ],
+  "homepage": "https://github.com/AlbertAZ1992/every-qrcode#readme",
+  "bugs": {
+    "url": "https://github.com/AlbertAZ1992/every-qrcode/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlbertAZ1992/every-qrcode.git",
+    "directory": "packages/renderer-webgpu"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@every-qrcode/core": "workspace:0.1.1"
+  }
+}
