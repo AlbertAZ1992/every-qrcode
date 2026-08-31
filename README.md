@@ -21,7 +21,7 @@ and WebGPU packages. Rendering stays in the browser, with no telemetry or server
 - **Privacy-friendly** — generation runs locally without analytics or network requests.
 
 Try the official Gallery and Studio at
-[every-qr-code-world.albertaz1992.workers.dev](https://every-qr-code-world.albertaz1992.workers.dev).
+[every-qrcode.com](https://every-qrcode.com/).
 
 ## React QR code component
 
