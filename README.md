@@ -1,4 +1,16 @@
-# Every QR Code — deterministic 3D QR code components
+# Every QR Code
+
+![Tree to QR to Terrain to QR](docs/every-qrcode-demo.gif)
+
+**Deterministic, scannable 3D QR worlds for React & Web Components.**
+
+[Live Demo](https://every-qrcode.com/) ·
+[React npm](https://www.npmjs.com/package/@every-qrcode/react) ·
+[Web Component npm](https://www.npmjs.com/package/@every-qrcode/web-component)
+
+```bash
+pnpm add @every-qrcode/react
+```
 
 [![npm React package](https://img.shields.io/npm/v/@every-qrcode/react?label=react)](https://www.npmjs.com/package/@every-qrcode/react)
 [![npm Web Component](https://img.shields.io/npm/v/@every-qrcode/web-component?label=web%20component)](https://www.npmjs.com/package/@every-qrcode/web-component)
@@ -20,14 +32,7 @@ and WebGPU packages. Rendering stays in the browser, with no telemetry or server
 - **Graceful WebGPU fallback** — unsupported devices receive a static, scannable SVG QR code.
 - **Privacy-friendly** — generation runs locally without analytics or network requests.
 
-Try the official Gallery and Studio at
-[every-qrcode.com](https://every-qrcode.com/).
-
 ## React QR code component
-
-```bash
-pnpm add @every-qrcode/react
-```
 
 ```tsx
 import { EveryQRCode } from "@every-qrcode/react";

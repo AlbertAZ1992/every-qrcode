@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Deterministic, scannable 3D QR code components for React and the web platform.",
-  "homepage": "https://every-qr-code-world.albertaz1992.workers.dev",
+  "homepage": "https://every-qrcode.com/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AlbertAZ1992/every-qrcode.git"
