@@ -1,6 +1,27 @@
 # Every QR Code
 
-![Tree to QR to Terrain to QR](docs/every-qrcode-demo.gif)
+<table>
+  <tr>
+    <th>Tree</th>
+    <th>Terrain</th>
+  </tr>
+  <tr>
+    <td>
+      <img
+        src="docs/every-qrcode-core-tree.gif"
+        alt="Tree QR world morphing into a scannable QR code"
+        width="480"
+      />
+    </td>
+    <td>
+      <img
+        src="docs/every-qrcode-core-terrain.gif"
+        alt="Terrain QR world morphing into a scannable QR code"
+        width="480"
+      />
+    </td>
+  </tr>
+</table>
 
 **Deterministic, scannable 3D QR worlds for React & Web Components.**
 
