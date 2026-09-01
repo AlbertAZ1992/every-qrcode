@@ -1,27 +1,14 @@
 # Every QR Code
 
-<table>
-  <tr>
-    <th>Tree</th>
-    <th>Terrain</th>
-  </tr>
-  <tr>
-    <td>
-      <img
-        src="docs/every-qrcode-core-tree.gif"
-        alt="Tree QR world morphing into a scannable QR code"
-        width="480"
-      />
-    </td>
-    <td>
-      <img
-        src="docs/every-qrcode-core-terrain.gif"
-        alt="Terrain QR world morphing into a scannable QR code"
-        width="480"
-      />
-    </td>
-  </tr>
-</table>
+**English** | [简体中文](README.zh-CN.md)
+
+### Tree
+
+![Tree QR world morphing into a scannable QR code](docs/every-qrcode-core-tree.gif)
+
+### Terrain
+
+![Terrain QR world morphing into a scannable QR code](docs/every-qrcode-core-terrain.gif)
 
 **Deterministic, scannable 3D QR worlds for React & Web Components.**
 
@@ -100,11 +87,23 @@ in the shared core and renderer automatically.
 - `identityScope="url"` includes the full normalized URL in the identity.
 - Both models morph to the same canonical QR matrix.
 
-## Reproducible worlds
+## Reproducible worlds: generator v1 and v2
 
-A URL becomes a durable world when it is stored with its `generatorVersion`. Package releases and
-generator versions are deliberately separate: a package can receive fixes without changing a
-world, while a future visual algorithm ships as generator v2 instead of rewriting v1.
+A generator version is a drawing recipe, not an npm package version:
+
+```text
+the same URL + generator v1 → the original world
+the same URL + generator v2 → a new world made by the new recipe
+```
+
+New packages can contain both recipes. Updating a package does not move a saved v1 world to v2.
+
+> Generator versioning is implemented on `main` for the `0.1.2` package release. npm remains on
+> `0.1.1` until that release is published.
+
+### Save the version with the URL
+
+When an app creates a world that will be saved or shared, record the current generator version:
 
 ```tsx
 import { CURRENT_GENERATOR_VERSION, EveryQRCode } from "@every-qrcode/react";
@@ -117,9 +116,23 @@ const savedWorld = {
 <EveryQRCode generatorVersion={savedWorld.generatorVersion} url={savedWorld.url} />;
 ```
 
-- Existing unversioned records are interpreted as generator v1.
-- Unsupported versions fail explicitly instead of silently rendering with the latest algorithm.
-- Changing the default generator does not change a world that recorded its version.
+The Web Component uses the same rule with `generator-version="1"`.
+
+- Not saving the world? Omit the version and use the current generator.
+- Migrating old saved records? Set their missing version to `1` once.
+- Loading a saved world? Always pass its recorded version back to the component.
+- Loading a version the installed package does not support? Update the package; the component will
+  not silently substitute another recipe.
+
+### What this upgrade adds
+
+- A public `generatorVersion` React prop and `generator-version` Web Component attribute.
+- A frozen v1 path for the seed model, Tree and Terrain geometry, and shaders.
+- Golden fingerprints that fail tests if a future change accidentally alters v1 output.
+- Versioned Studio share links and Gallery records, with existing records migrated to v1.
+
+When v2 arrives, the package will add a separate v2 implementation and make it the default for new
+worlds. The v1 implementation stays available for every world that already recorded version 1.
 
 The [Studio](https://every-qrcode.com/) share format stores this version alongside the URL, model,
 and theme, so a saved link stays pinned to the visual algorithm that created it.
