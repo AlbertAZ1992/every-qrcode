@@ -1,3 +1,9 @@
+import {
+  CURRENT_GENERATOR_VERSION,
+  resolveGeneratorVersion,
+  type GeneratorVersion,
+} from "@every-qrcode/core";
+
 import { createSeedGpuScene, type SeedGpuScene } from "./gpu-scene.js";
 import {
   createSeedBlockField,
@@ -5,7 +11,6 @@ import {
   type SeedForm,
   type SeedModel,
 } from "./seed-model.js";
-import { SEED_POST_SHADER, SEED_WEATHER_SHADER } from "./shared-shaders.js";
 import { createTerrainPalette, type TerrainScenePalette } from "./terrain-palette.js";
 
 export type SeedRenderer = {
@@ -82,16 +87,33 @@ type TerrainShaderSources = {
   readonly terrain: string;
 };
 
-type SeedShaderSources = TerrainShaderSources | TreeShaderSources;
+type SharedShaderSources = {
+  readonly post: string;
+  readonly weather: string;
+};
 
-const SEED_SHADER_LOADERS = {
-  terrain: async (): Promise<TerrainShaderSources> => {
-    const { TERRAIN_SHADER } = await import("./terrain-shaders.js");
-    return { form: "terrain", terrain: TERRAIN_SHADER };
+type SeedShaderSources = SharedShaderSources & (TerrainShaderSources | TreeShaderSources);
+
+async function loadVersionOneSharedShaders(): Promise<SharedShaderSources> {
+  const shared = await import("./shared-shaders.js");
+  return { post: shared.SEED_POST_SHADER, weather: shared.SEED_WEATHER_SHADER };
+}
+
+const VERSION_ONE_SHADER_LOADERS = {
+  terrain: async (): Promise<SeedShaderSources> => {
+    const [shared, terrain] = await Promise.all([
+      loadVersionOneSharedShaders(),
+      import("./terrain-shaders.js"),
+    ]);
+    return { ...shared, form: "terrain", terrain: terrain.TERRAIN_SHADER };
   },
-  tree: async (): Promise<TreeShaderSources> => {
-    const tree = await import("./tree-shaders.js");
+  tree: async (): Promise<SeedShaderSources> => {
+    const [shared, tree] = await Promise.all([
+      loadVersionOneSharedShaders(),
+      import("./tree-shaders.js"),
+    ]);
     return {
+      ...shared,
       blocks: tree.TREE_BLOCK_SHADER,
       branches: tree.TREE_BRANCH_SHADER,
       butterflies: tree.TREE_BUTTERFLY_SHADER,
@@ -104,8 +126,16 @@ const SEED_SHADER_LOADERS = {
   },
 } satisfies Record<SeedForm, () => Promise<SeedShaderSources>>;
 
-export async function loadSeedShaderSources(form: SeedForm): Promise<SeedShaderSources> {
-  return SEED_SHADER_LOADERS[form]();
+const SEED_SHADER_LOADERS = {
+  1: VERSION_ONE_SHADER_LOADERS,
+} satisfies Record<GeneratorVersion, typeof VERSION_ONE_SHADER_LOADERS>;
+
+export async function loadSeedShaderSources(
+  form: SeedForm,
+  generatorVersion: GeneratorVersion = CURRENT_GENERATOR_VERSION,
+): Promise<SeedShaderSources> {
+  const version = resolveGeneratorVersion(generatorVersion);
+  return SEED_SHADER_LOADERS[version][form]();
 }
 
 type SeedBuffers = {
@@ -389,10 +419,11 @@ async function createSharedPipelines(
   device: GPUDevice,
   format: GPUTextureFormat,
   layouts: PipelineLayouts,
+  sources: SharedShaderSources,
 ): Promise<SharedPipelines> {
   const [postModule, rainModule] = await Promise.all([
-    createShaderModule(device, "every-qrcode-post", SEED_POST_SHADER),
-    createShaderModule(device, "every-qrcode-rain", SEED_WEATHER_SHADER),
+    createShaderModule(device, "every-qrcode-post", sources.post),
+    createShaderModule(device, "every-qrcode-rain", sources.weather),
   ]);
   const rain = createScenePipeline(device, format, {
     blend: ALPHA_BLEND,
@@ -515,11 +546,10 @@ async function createPipelines(
   format: GPUTextureFormat,
   layouts: PipelineLayouts,
   form: SeedForm,
+  generatorVersion: GeneratorVersion,
 ): Promise<SeedPipelines> {
-  const [shared, sources] = await Promise.all([
-    createSharedPipelines(device, format, layouts),
-    loadSeedShaderSources(form),
-  ]);
+  const sources = await loadSeedShaderSources(form, generatorVersion);
+  const shared = await createSharedPipelines(device, format, layouts, sources);
   return sources.form === "terrain"
     ? createTerrainPipelines(device, format, layouts, shared, sources)
     : createTreePipelines(device, format, layouts, shared, sources);
@@ -811,7 +841,7 @@ async function initializeGpu(
   const blockField = createSeedBlockField(model, form);
   const scene = createSeedGpuScene(model, form);
   const layouts = createLayouts(device);
-  const pipelines = await createPipelines(device, format, layouts, form);
+  const pipelines = await createPipelines(device, format, layouts, form, model.generatorVersion);
   const buffers = createBuffers(device, blockField, scene);
   const bindGroups = createBindGroups(device, layouts, buffers);
   const sampler = device.createSampler({ magFilter: "linear", minFilter: "linear" });

@@ -1,4 +1,10 @@
-import { mixFamily, type EveryQRCodeIdentity, type RandomStream } from "@every-qrcode/core";
+import {
+  mixFamily,
+  resolveGeneratorVersion,
+  type EveryQRCodeIdentity,
+  type GeneratorVersion,
+  type RandomStream,
+} from "@every-qrcode/core";
 
 export const SEED_TOPOLOGIES = [
   "soft-sphere",
@@ -103,6 +109,7 @@ export type SeedModel = {
   readonly archetype: TreeArchetype;
   readonly eccentricity: number;
   readonly features: readonly SeedFeatureAnchor[];
+  readonly generatorVersion: GeneratorVersion;
   readonly material: SeedMaterial;
   readonly morphSeed: number;
   readonly modules: readonly SeedModuleAnchor[];
@@ -113,6 +120,10 @@ export type SeedModel = {
   readonly qrSize: number;
   readonly satellites: readonly SeedSatellite[];
   readonly topology: SeedTopology;
+};
+
+export type CreateSeedModelOptions = {
+  readonly generatorVersion?: GeneratorVersion;
 };
 
 export const SEED_BLOCK_TYPES = {
@@ -557,7 +568,7 @@ function createSatellites(stream: RandomStream): readonly SeedSatellite[] {
   }));
 }
 
-export async function createSeedModel(identity: EveryQRCodeIdentity): Promise<SeedModel> {
+async function createSeedModelV1(identity: EveryQRCodeIdentity): Promise<SeedModel> {
   const detailSource = identity.link.scope === "url" ? "page" : "site";
   const [family, familyShape, detailShape, detail, familyMorph, detailMorph, archetype] =
     await Promise.all([
@@ -578,6 +589,7 @@ export async function createSeedModel(identity: EveryQRCodeIdentity): Promise<Se
     archetype: selectTreeArchetype(archetype.next()),
     eccentricity,
     features: selectFeatureAnchors(identity, recipe.topology, eccentricity, detail),
+    generatorVersion: 1,
     material: recipe.material,
     morphSeed: mixFamily(familyMorph.next(), detailMorph.next(), 0.78),
     modules: createModuleAnchors(identity, recipe.topology, eccentricity),
@@ -589,4 +601,18 @@ export async function createSeedModel(identity: EveryQRCodeIdentity): Promise<Se
     satellites: createSatellites(detail),
     topology: recipe.topology,
   };
+}
+
+type SeedModelFactory = (identity: EveryQRCodeIdentity) => Promise<SeedModel>;
+
+const SEED_MODEL_FACTORIES = {
+  1: createSeedModelV1,
+} satisfies Record<GeneratorVersion, SeedModelFactory>;
+
+export async function createSeedModel(
+  identity: EveryQRCodeIdentity,
+  options: CreateSeedModelOptions = {},
+): Promise<SeedModel> {
+  const version = resolveGeneratorVersion(options.generatorVersion);
+  return SEED_MODEL_FACTORIES[version](identity);
 }

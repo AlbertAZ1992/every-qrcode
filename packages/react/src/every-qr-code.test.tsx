@@ -41,6 +41,14 @@ describe("EveryQRCode", () => {
     expect(terrain).toContain('data-every-qrcode-model="terrain"');
   });
 
+  it("pins the deterministic generator through a public prop", () => {
+    const markup = renderToStaticMarkup(
+      <EveryQRCode generatorVersion={1} url="https://example.com/versioned-world" />,
+    );
+
+    expect(markup).toContain('data-every-qrcode-generator-version="1"');
+  });
+
   it("binds each rendering backend to a model-specific canvas", () => {
     const tree = renderToStaticMarkup(<EveryQRCode model="tree" url="https://example.com" />);
     const terrain = renderToStaticMarkup(<EveryQRCode model="terrain" url="https://example.com" />);

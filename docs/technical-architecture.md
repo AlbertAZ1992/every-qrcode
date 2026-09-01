@@ -9,11 +9,11 @@ Every QR Code turns one normalized URL into one deterministic seed and one canon
 Tree and Terrain are two render forms of that same seed:
 
 ```text
-normalized URL
+normalized URL + pinned generator version
     ↓
 Link DNA + canonical QR matrix
     ↓
-shared deterministic seed model
+versioned deterministic seed model
     ├── lazy Tree renderer bundle
     └── lazy Terrain renderer bundle
     ↓
@@ -90,12 +90,13 @@ facade or legacy package layer.
 For React and Web Component consumers, the runtime flow is:
 
 1. Normalize the URL and build `EveryQRCodeIdentity`.
-2. Read `model` and import the shared renderer.
-3. Import only the selected Tree or Terrain Shader bundle.
-4. Build the deterministic seed model and the selected model's pipelines.
-5. Mount the selected form into the shared WebGPU canvas.
-6. Toggle the renderer between the 3D form and canonical QR using `setFlat`.
-7. Dispose GPU resources when the component unmounts or its identity changes.
+2. Resolve `generatorVersion`, defaulting to `CURRENT_GENERATOR_VERSION`.
+3. Read `model` and import the shared renderer.
+4. Import only the selected version's Tree or Terrain Shader bundle.
+5. Build that version's deterministic seed model and selected model pipelines.
+6. Mount the selected form into the shared WebGPU canvas.
+7. Toggle the renderer between the 3D form and canonical QR using `setFlat`.
+8. Dispose GPU resources when the component unmounts or its identity changes.
 
 The adapters replace the canvas when the selected model changes so a previous GPU context cannot
 leak into the next model.
@@ -103,6 +104,12 @@ leak into the next model.
 ## 5. Compatibility rules
 
 - `model="tree" | "terrain"` is the only public model contract.
+- `generatorVersion` is independent of npm package versions. Package patches may preserve the
+  current generator; visual algorithm changes must add a supported generator version.
+- A recorded world must persist `generatorVersion`. Existing unversioned worlds resolve to version
+  1; unknown versions fail instead of silently rendering with the latest algorithm.
+- Version 1 seed, Tree/Terrain geometry buffers, and Shader bundles have golden fingerprints. Do
+  not update those fingerprints for a visual change; add a new versioned implementation.
 - The QR matrix is the source of truth and is identical across both models.
 - DNA channel labels are versioned protocol inputs. Four historic `linkseed:` hash salts remain
   unchanged solely to preserve every existing URL's deterministic identity; they are not package

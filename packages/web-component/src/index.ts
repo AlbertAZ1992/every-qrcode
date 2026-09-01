@@ -1,6 +1,9 @@
 import {
+  CURRENT_GENERATOR_VERSION,
   createEveryQRCodeIdentity,
   createQRSvgPath,
+  resolveGeneratorVersion,
+  type GeneratorVersion,
   type IdentityScope,
   type QRSvgPath,
 } from "@every-qrcode/core";
@@ -8,6 +11,7 @@ import {
 import { replaceRendererCanvas } from "./renderer-canvas.js";
 
 export const EVERY_QR_CODE_TAG = "every-qr-code";
+export { CURRENT_GENERATOR_VERSION };
 
 const TEMPLATE = `
   <style>
@@ -49,6 +53,11 @@ function readScope(element: HTMLElement): IdentityScope {
   return element.getAttribute("identity-scope") === "url" ? "url" : "site";
 }
 
+function readGeneratorVersion(element: HTMLElement): GeneratorVersion {
+  const value = element.getAttribute("generator-version");
+  return resolveGeneratorVersion(value === null ? undefined : Number(value));
+}
+
 function readModel(element: HTMLElement): EveryQRCodeModel {
   const model = element.getAttribute("model");
   if (model === "terrain") return model;
@@ -64,11 +73,12 @@ function errorFrom(reason: unknown): Error {
 }
 
 async function prepareSeed(
+  generatorVersion: GeneratorVersion,
   model: EveryQRCodeModel,
   identity: Awaited<ReturnType<typeof createEveryQRCodeIdentity>>,
 ): Promise<PreparedSeed> {
   const { createSeedModel, mountSeed } = await import("@every-qrcode/renderer-webgpu");
-  const seed = await createSeedModel(identity);
+  const seed = await createSeedModel(identity, { generatorVersion });
   return {
     mount: (canvas, onError) => mountSeed(canvas, seed, {}, model, { onError }),
     qr: createQRSvgPath(identity.qr),
@@ -78,7 +88,7 @@ async function prepareSeed(
 function createElementConstructor(): CustomElementConstructor {
   return class EveryQRCodeElement extends HTMLElement {
     static get observedAttributes(): string[] {
-      return ["identity-scope", "initial-view", "interactive", "model", "url"];
+      return ["generator-version", "identity-scope", "initial-view", "interactive", "model", "url"];
     }
 
     private readonly button: HTMLButtonElement;
@@ -117,7 +127,12 @@ function createElementConstructor(): CustomElementConstructor {
 
     attributeChangedCallback(name: string): void {
       if (!this.isConnected) return;
-      if (name === "url" || name === "identity-scope" || name === "model") {
+      if (
+        name === "generator-version" ||
+        name === "url" ||
+        name === "identity-scope" ||
+        name === "model"
+      ) {
         void this.renderSeed();
         return;
       }
@@ -172,10 +187,11 @@ function createElementConstructor(): CustomElementConstructor {
       const revision = ++this.revision;
       const model = readModel(this);
       try {
+        const generatorVersion = readGeneratorVersion(this);
         const identity = await createEveryQRCodeIdentity(this.getAttribute("url") ?? "", {
           identityScope: readScope(this),
         });
-        const prepared = await prepareSeed(model, identity);
+        const prepared = await prepareSeed(generatorVersion, model, identity);
         if (revision !== this.revision || !this.isConnected) return;
         this.disposeRenderer();
         this.canvas = replaceRendererCanvas(this.canvas, model);

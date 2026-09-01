@@ -14,6 +14,15 @@ export function WebsiteIdentity() {
 }
 ```
 
+Persist the generator version with any saved or shared world:
+
+```tsx
+<EveryQRCode generatorVersion={1} url="https://example.com" />
+```
+
+Use `CURRENT_GENERATOR_VERSION` when creating a new record. Continue passing the stored number when
+rendering it later; an unsupported version fails explicitly instead of drifting to a new output.
+
 Choose `model="terrain"`, open with `initialView="qr"`, or use `identityScope="url"` for a
 page-specific identity. Unsupported WebGPU devices receive a static, scannable SVG QR fallback.
 

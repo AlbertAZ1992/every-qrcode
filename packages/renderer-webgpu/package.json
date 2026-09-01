@@ -1,6 +1,6 @@
 {
   "name": "@every-qrcode/renderer-webgpu",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "description": "WebGPU Tree and Terrain renderer that morphs deterministic 3D worlds into QR codes.",
   "keywords": [
@@ -40,6 +40,6 @@
     "build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@every-qrcode/core": "workspace:0.1.1"
+    "@every-qrcode/core": "workspace:0.1.2"
   }
 }
