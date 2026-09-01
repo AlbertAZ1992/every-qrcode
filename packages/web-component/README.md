@@ -14,6 +14,14 @@ import "@every-qrcode/web-component/auto";
 <every-qr-code url="https://example.com"></every-qr-code>
 ```
 
+Saved or shared worlds can pin the visual protocol with `generator-version`:
+
+```html
+<every-qr-code generator-version="1" url="https://example.com"></every-qr-code>
+```
+
+Unknown generator versions fail explicitly instead of falling forward to a different world.
+
 Use `model="terrain"`, `initial-view="qr"`, or `identity-scope="url"` to change the default
 presentation. Unsupported WebGPU devices receive a static, scannable SVG QR fallback.
 

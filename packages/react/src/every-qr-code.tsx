@@ -1,6 +1,8 @@
 import {
+  CURRENT_GENERATOR_VERSION,
   createEveryQRCodeIdentity,
   createQRSvgPath,
+  type GeneratorVersion,
   type IdentityScope,
   type QRSvgPath,
 } from "@every-qrcode/core";
@@ -19,9 +21,11 @@ import { nextEveryQRCodeView } from "./every-qr-code-view.js";
 export type EveryQRCodeView = "model" | "qr";
 export type EveryQRCodeModel = "terrain" | "tree";
 export type EveryQRCodeSceneConfig = SeedSceneConfig;
+export type EveryQRCodeGeneratorVersion = GeneratorVersion;
 
 export type EveryQRCodeProps = {
   readonly className?: string;
+  readonly generatorVersion?: EveryQRCodeGeneratorVersion;
   readonly identityScope?: IdentityScope;
   readonly initialView?: EveryQRCodeView;
   readonly initialZoom?: number;
@@ -103,6 +107,7 @@ function clampZoom(zoom: number): number {
 }
 
 function useSeedZoom(options: {
+  readonly generatorVersion: EveryQRCodeGeneratorVersion;
   readonly initialZoom: number;
   readonly model: EveryQRCodeModel;
   readonly rendererRef: { current: SeedRenderer | null };
@@ -116,7 +121,7 @@ function useSeedZoom(options: {
   const [zoom, setZoom] = useState(zoomRef.current);
   useEffect(
     () => setZoom(clampZoom(options.initialZoom)),
-    [options.initialZoom, options.model, options.url],
+    [options.generatorVersion, options.initialZoom, options.model, options.url],
   );
   useEffect(() => {
     zoomRef.current = zoom;
@@ -176,11 +181,12 @@ function errorFrom(reason: unknown): Error {
 }
 
 async function prepareSeed(
+  generatorVersion: EveryQRCodeGeneratorVersion,
   model: EveryQRCodeModel,
   identity: Awaited<ReturnType<typeof createEveryQRCodeIdentity>>,
 ): Promise<PreparedSeed> {
   const { createSeedModel, mountSeed } = await import("@every-qrcode/renderer-webgpu");
-  const seed = await createSeedModel(identity);
+  const seed = await createSeedModel(identity, { generatorVersion });
   return {
     mount: (canvas, scene, onError) => mountSeed(canvas, seed, scene, model, { onError }),
     qr: createQRSvgPath(identity.qr),
@@ -189,6 +195,7 @@ async function prepareSeed(
 
 export function EveryQRCode({
   className,
+  generatorVersion = CURRENT_GENERATOR_VERSION,
   identityScope = "site",
   initialView = "model",
   initialZoom = 1,
@@ -208,6 +215,7 @@ export function EveryQRCode({
   const [prepared, setPrepared] = useState<PreparedSeed | null>(null);
   const [view, setView] = useState<EveryQRCodeView>(initialView);
   const { handleKeyDown, zoom, zoomRef } = useSeedZoom({
+    generatorVersion,
     initialZoom,
     model,
     rendererRef,
@@ -232,14 +240,14 @@ export function EveryQRCode({
     onErrorRef.current = onError;
   }, [onError]);
 
-  useEffect(() => setView(initialView), [initialView, model, url]);
+  useEffect(() => setView(initialView), [generatorVersion, initialView, model, url]);
 
   useEffect(() => {
     let cancelled = false;
     setError(null);
     setPrepared(null);
     void createEveryQRCodeIdentity(url, { identityScope })
-      .then((identity) => prepareSeed(model, identity))
+      .then((identity) => prepareSeed(generatorVersion, model, identity))
       .then((nextPrepared) => {
         if (cancelled) return;
         setError(null);
@@ -254,7 +262,7 @@ export function EveryQRCode({
     return () => {
       cancelled = true;
     };
-  }, [identityScope, model, url]);
+  }, [generatorVersion, identityScope, model, url]);
 
   useEffect(() => {
     sceneRef.current = scene;
@@ -286,6 +294,7 @@ export function EveryQRCode({
       }
       className={className}
       data-every-qrcode-fallback={fallback ? "qr" : undefined}
+      data-every-qrcode-generator-version={generatorVersion}
       data-every-qrcode-model={model}
       data-every-qrcode-view={view}
       data-every-qrcode-zoom={zoom.toFixed(2)}

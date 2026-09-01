@@ -1,6 +1,6 @@
 {
   "name": "@every-qrcode/core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "description": "Deterministic URL identity, visual DNA, and QR matrix generation for Every QR Code.",
   "keywords": [

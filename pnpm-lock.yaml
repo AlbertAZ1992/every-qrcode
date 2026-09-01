@@ -67,10 +67,10 @@ importers:
   packages/react:
     dependencies:
       '@every-qrcode/core':
-        specifier: workspace:0.1.1
+        specifier: workspace:0.1.2
         version: link:../core
       '@every-qrcode/renderer-webgpu':
-        specifier: workspace:0.1.1
+        specifier: workspace:0.1.2
         version: link:../renderer-webgpu
     devDependencies:
       '@types/react':
@@ -89,16 +89,16 @@ importers:
   packages/renderer-webgpu:
     dependencies:
       '@every-qrcode/core':
-        specifier: workspace:0.1.1
+        specifier: workspace:0.1.2
         version: link:../core
 
   packages/web-component:
     dependencies:
       '@every-qrcode/core':
-        specifier: workspace:0.1.1
+        specifier: workspace:0.1.2
         version: link:../core
       '@every-qrcode/renderer-webgpu':
-        specifier: workspace:0.1.1
+        specifier: workspace:0.1.2
         version: link:../renderer-webgpu
 
 packages:

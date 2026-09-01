@@ -1,4 +1,4 @@
-import { createEveryQRCodeIdentity } from "@every-qrcode/core";
+import { createEveryQRCodeIdentity, CURRENT_GENERATOR_VERSION } from "@every-qrcode/core";
 import { describe, expect, it } from "vitest";
 
 import * as seedModel from "./seed-model";
@@ -13,6 +13,17 @@ import {
 } from "./seed-model";
 
 describe("createSeedModel", () => {
+  it("records the generator version that owns the deterministic output", async () => {
+    const identity = await createEveryQRCodeIdentity("https://example.com/versioned-world");
+    const model = await createSeedModel(identity, { generatorVersion: 1 });
+
+    expect(CURRENT_GENERATOR_VERSION).toBe(1);
+    expect(model.generatorVersion).toBe(1);
+    await expect(createSeedModel(identity, { generatorVersion: 2 as never })).rejects.toThrowError(
+      "Unsupported generator version: 2",
+    );
+  });
+
   it("is deterministic for the same link", async () => {
     const identity = await createEveryQRCodeIdentity("https://example.com/tree?a=1");
     expect(await createSeedModel(identity)).toEqual(await createSeedModel(identity));

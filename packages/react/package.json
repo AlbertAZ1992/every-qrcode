@@ -1,6 +1,6 @@
 {
   "name": "@every-qrcode/react",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "description": "A scannable React QR code component that grows into a deterministic 3D Tree or Terrain world.",
   "keywords": [
@@ -40,8 +40,8 @@
     "build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@every-qrcode/core": "workspace:0.1.1",
-    "@every-qrcode/renderer-webgpu": "workspace:0.1.1"
+    "@every-qrcode/core": "workspace:0.1.2",
+    "@every-qrcode/renderer-webgpu": "workspace:0.1.2"
   },
   "devDependencies": {
     "@types/react": "19.2.18",

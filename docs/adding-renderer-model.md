@@ -31,6 +31,10 @@ when `SeedForm` gains a value without a matching lazy loader. This is the model 
 - The production build emits a separate lazy chunk for the model.
 - Tree remains the default when `model` is omitted.
 
+If the model changes any existing world's seed, CPU geometry, or Shader output, add a new entry to
+`SUPPORTED_GENERATOR_VERSIONS` and a matching seed/Shader registry implementation. Never rewrite a
+released generator version or replace its golden fingerprints.
+
 Run the complete verification sequence:
 
 ```bash

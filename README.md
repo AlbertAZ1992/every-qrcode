@@ -37,9 +37,9 @@ pnpm add @every-qrcode/react
 [![npm Web Component](https://img.shields.io/npm/v/@every-qrcode/web-component?label=web%20component)](https://www.npmjs.com/package/@every-qrcode/web-component)
 [![MIT License](https://img.shields.io/badge/license-MIT-black.svg)](LICENSE)
 
-Every QR Code turns a URL into a deterministic, scannable 3D world. The same normalized identity
-always produces the same QR matrix and visual DNA. Switch between a living Tree or Terrain model
-and the canonical QR code without changing the destination.
+Every QR Code turns a URL into a deterministic, scannable 3D world. The same normalized identity,
+model, and generator version produce the same QR matrix and visual DNA. Switch between a living
+Tree or Terrain model and the canonical QR code without changing the destination.
 
 Use the React component, the framework-independent Web Component, or the lower-level TypeScript
 and WebGPU packages. Rendering stays in the browser, with no telemetry or server calls.
@@ -47,7 +47,7 @@ and WebGPU packages. Rendering stays in the browser, with no telemetry or server
 ## Why Every QR Code?
 
 - **Scannable by design** — every world morphs into its canonical QR matrix.
-- **Deterministic visual identity** — the same site or URL always grows the same world.
+- **Versioned visual identity** — recorded worlds keep their original generator behavior.
 - **Two lazy 3D models** — Tree and Terrain shader bundles load only when selected.
 - **React and Web Components** — use the same renderer across modern frontend stacks.
 - **Graceful WebGPU fallback** — unsupported devices receive a static, scannable SVG QR code.
@@ -99,6 +99,30 @@ in the shared core and renderer automatically.
 - `identityScope="site"` is the default and gives every path on one hostname the same identity.
 - `identityScope="url"` includes the full normalized URL in the identity.
 - Both models morph to the same canonical QR matrix.
+
+## Reproducible worlds
+
+A URL becomes a durable world when it is stored with its `generatorVersion`. Package releases and
+generator versions are deliberately separate: a package can receive fixes without changing a
+world, while a future visual algorithm ships as generator v2 instead of rewriting v1.
+
+```tsx
+import { CURRENT_GENERATOR_VERSION, EveryQRCode } from "@every-qrcode/react";
+
+const savedWorld = {
+  generatorVersion: CURRENT_GENERATOR_VERSION,
+  url: "https://example.com",
+};
+
+<EveryQRCode generatorVersion={savedWorld.generatorVersion} url={savedWorld.url} />;
+```
+
+- Existing unversioned records are interpreted as generator v1.
+- Unsupported versions fail explicitly instead of silently rendering with the latest algorithm.
+- Changing the default generator does not change a world that recorded its version.
+
+The [Studio](https://every-qrcode.com/) share format stores this version alongside the URL, model,
+and theme, so a saved link stays pinned to the visual algorithm that created it.
 
 See [the package architecture](packages/README.md) and
 [technical architecture](docs/technical-architecture.md) for internal ownership boundaries. The

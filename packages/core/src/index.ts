@@ -1,4 +1,5 @@
 export * from "./errors.js";
+export * from "./generator-version.js";
 export * from "./identity.js";
 export * from "./link-dna.js";
 export * from "./qr.js";

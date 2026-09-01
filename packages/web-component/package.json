@@ -1,6 +1,6 @@
 {
   "name": "@every-qrcode/web-component",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "description": "A framework-independent 3D QR code Web Component powered by deterministic Link DNA and WebGPU.",
   "keywords": [
@@ -43,7 +43,7 @@
     "build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@every-qrcode/core": "workspace:0.1.1",
-    "@every-qrcode/renderer-webgpu": "workspace:0.1.1"
+    "@every-qrcode/core": "workspace:0.1.2",
+    "@every-qrcode/renderer-webgpu": "workspace:0.1.2"
   }
 }
