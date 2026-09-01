@@ -2,19 +2,13 @@
 
 **English** | [简体中文](README.zh-CN.md)
 
-### Tree
-
-![Tree QR world morphing into a scannable QR code](docs/every-qrcode-core-tree.gif)
-
-### Terrain
-
-![Terrain QR world morphing into a scannable QR code](docs/every-qrcode-core-terrain.gif)
-
-**Deterministic, scannable 3D QR worlds for React & Web Components.**
+**An open-source React QR code generator and Web Component that turns URLs into deterministic,
+scannable 3D worlds.** Choose a living Tree or Terrain, then morph it back to the canonical QR code.
 
 [Live Demo](https://every-qrcode.com/) ·
 [React npm](https://www.npmjs.com/package/@every-qrcode/react) ·
-[Web Component npm](https://www.npmjs.com/package/@every-qrcode/web-component)
+[Web Component npm](https://www.npmjs.com/package/@every-qrcode/web-component) ·
+[Contributing](CONTRIBUTING.md)
 
 ```bash
 pnpm add @every-qrcode/react
@@ -23,6 +17,14 @@ pnpm add @every-qrcode/react
 [![npm React package](https://img.shields.io/npm/v/@every-qrcode/react?label=react)](https://www.npmjs.com/package/@every-qrcode/react)
 [![npm Web Component](https://img.shields.io/npm/v/@every-qrcode/web-component?label=web%20component)](https://www.npmjs.com/package/@every-qrcode/web-component)
 [![MIT License](https://img.shields.io/badge/license-MIT-black.svg)](LICENSE)
+
+### Tree
+
+![Tree QR world morphing into a scannable QR code](docs/every-qrcode-core-tree.gif)
+
+### Terrain
+
+![Terrain QR world morphing into a scannable QR code](docs/every-qrcode-core-terrain.gif)
 
 Every QR Code turns a URL into a deterministic, scannable 3D world. The same normalized identity,
 model, and generator version produce the same QR matrix and visual DNA. Switch between a living
@@ -98,9 +100,6 @@ the same URL + generator v2 → a new world made by the new recipe
 
 New packages can contain both recipes. Updating a package does not move a saved v1 world to v2.
 
-> Generator versioning is implemented on `main` for the `0.1.2` package release. npm remains on
-> `0.1.1` until that release is published.
-
 ### Save the version with the URL
 
 When an app creates a world that will be saved or shared, record the current generator version:
@@ -141,6 +140,14 @@ See [the package architecture](packages/README.md) and
 [technical architecture](docs/technical-architecture.md) for internal ownership boundaries. The
 [renderer model guide](docs/adding-renderer-model.md) lists the code and tests needed for a new
 lazy model.
+
+## Contributing
+
+You do not need to implement an entire 3D model to help. Visual references, geometry sketches,
+deterministic algorithms, WGSL shaders, tests, and documentation are all useful contribution sizes.
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) to choose a small starting point. The public model roadmap
+currently includes [Hokusai Waves, Crystalline, and Mechanical](docs/model-roadmap.md).
 
 ## Browser support
 

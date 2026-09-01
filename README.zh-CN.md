@@ -2,19 +2,13 @@
 
 [English](README.md) | **简体中文**
 
-### Tree
-
-![Tree QR 世界变为可扫描二维码](docs/every-qrcode-core-tree.gif)
-
-### Terrain
-
-![Terrain QR 世界变为可扫描二维码](docs/every-qrcode-core-terrain.gif)
-
-**面向 React 和 Web Components 的确定性、可扫描 3D QR 世界。**
+**一个开源的 React QR Code 生成器和 Web Component：把 URL 变成确定性、可扫描的 3D
+世界。** 你可以选择 Tree 或 Terrain，再让它变回对应的标准二维码。
 
 [在线体验](https://every-qrcode.com/) ·
 [React npm](https://www.npmjs.com/package/@every-qrcode/react) ·
-[Web Component npm](https://www.npmjs.com/package/@every-qrcode/web-component)
+[Web Component npm](https://www.npmjs.com/package/@every-qrcode/web-component) ·
+[参与贡献](CONTRIBUTING.md)
 
 ```bash
 pnpm add @every-qrcode/react
@@ -23,6 +17,14 @@ pnpm add @every-qrcode/react
 [![npm React package](https://img.shields.io/npm/v/@every-qrcode/react?label=react)](https://www.npmjs.com/package/@every-qrcode/react)
 [![npm Web Component](https://img.shields.io/npm/v/@every-qrcode/web-component?label=web%20component)](https://www.npmjs.com/package/@every-qrcode/web-component)
 [![MIT License](https://img.shields.io/badge/license-MIT-black.svg)](LICENSE)
+
+### Tree
+
+![Tree QR 世界变为可扫描二维码](docs/every-qrcode-core-tree.gif)
+
+### Terrain
+
+![Terrain QR 世界变为可扫描二维码](docs/every-qrcode-core-terrain.gif)
 
 Every QR Code 可以把一个 URL 变成确定性、可扫描的 3D 世界。相同的标准化身份、模型和
 generator version 会产生相同的 QR 矩阵和视觉基因。你可以在 Tree、Terrain 和标准二维码
@@ -97,9 +99,6 @@ Generator version 是一套“绘制世界的配方”，不是 npm 包版本：
 
 新的 npm 包可以同时包含 v1 和 v2。升级 npm 包不会自动把已经保存的 v1 世界变成 v2。
 
-> Generator version 功能已经在 `main` 中实现，计划随 `0.1.2` 包发布。在正式发布前，npm
-> latest 仍然是 `0.1.1`。
-
 ### 把版本和 URL 一起保存
 
 如果一个世界需要保存或分享，请在创建时记录当前 generator version：
@@ -138,6 +137,14 @@ Web Component 使用相同规则，对应的属性是 `generator-version="1"`。
 内部结构可以查看 [package architecture](packages/README.md) 和
 [technical architecture](docs/technical-architecture.md)。如果要添加新的懒加载模型，请查看
 [renderer model guide](docs/adding-renderer-model.md)。
+
+## 参与贡献
+
+你不需要一次完成整个 3D 模型。视觉参考、几何草图、确定性算法、WGSL shader、测试和文档
+都可以成为一次有效贡献。
+
+请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，选择一个足够小的切入点。当前公开的模型路线图
+包括 [Hokusai Waves、Crystalline 和 Mechanical](docs/model-roadmap.md)。
 
 ## 浏览器支持
 

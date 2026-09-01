@@ -1,0 +1,44 @@
+name: Model proposal
+description: Propose or help shape a deterministic 3D model for Every QR Code.
+title: "[Model proposal] "
+labels:
+  - enhancement
+  - help wanted
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A useful proposal can start with references or one small geometry idea. You do not need to
+        implement the complete WebGPU pipeline.
+  - type: textarea
+    id: direction
+    attributes:
+      label: Visual direction
+      description: What should this model look and feel like?
+      placeholder: Describe the silhouette, materials, motion, and strongest visual references.
+    validations:
+      required: true
+  - type: textarea
+    id: deterministic_geometry
+    attributes:
+      label: Deterministic geometry idea
+      description: How could the existing seeded QR field drive the model without random output?
+    validations:
+      required: true
+  - type: textarea
+    id: contribution
+    attributes:
+      label: Contribution slice
+      description: Which small piece could you help with?
+      placeholder: References, sketches, geometry, WGSL, tests, docs, or integration.
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Shared constraints
+      options:
+        - label: The model must converge to the same canonical QR matrix.
+          required: true
+        - label: The same identity and generator version must remain deterministic.
+          required: true
+        - label: Model-specific code should remain lazily loaded.
+          required: true

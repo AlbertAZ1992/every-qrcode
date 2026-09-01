@@ -2,12 +2,16 @@
   "name": "@every-qrcode/core",
   "version": "0.1.2",
   "private": false,
-  "description": "Deterministic URL identity, visual DNA, and QR matrix generation for Every QR Code.",
+  "description": "Deterministic URL identity and QR code generator core for creative 3D QR experiences.",
   "keywords": [
     "deterministic",
+    "javascript",
     "qr-code",
+    "qr-code-generator",
     "qrcode",
+    "qrcode-generator",
     "typescript",
+    "url-to-qr-code",
     "visual-identity"
   ],
   "homepage": "https://github.com/AlbertAZ1992/every-qrcode#readme",
