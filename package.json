@@ -16,6 +16,7 @@
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
     "lint": "oxlint --deny-warnings .",
+    "release:verify": "node scripts/verify-release-version.mjs",
     "test": "pnpm build:packages && vitest run",
     "typecheck": "pnpm build:packages && tsc --noEmit"
   },

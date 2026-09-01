@@ -173,6 +173,10 @@ pnpm build
 pnpm format:check
 ```
 
+Maintainers publish npm packages through the
+[GitHub Release workflow](docs/releasing.md), using npm Trusted Publishing instead of a stored
+publish token.
+
 ## License
 
 [MIT](LICENSE)
