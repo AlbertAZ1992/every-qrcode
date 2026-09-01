@@ -170,6 +170,9 @@ pnpm build
 pnpm format:check
 ```
 
+维护者通过 [GitHub Release 工作流](docs/releasing.md) 发布 npm 包，并使用 npm Trusted
+Publishing，不在 GitHub 中长期保存发布 token。
+
 ## License
 
 [MIT](LICENSE)
