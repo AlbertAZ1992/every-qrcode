@@ -2,10 +2,14 @@
   "name": "@every-qrcode/renderer-webgpu",
   "version": "0.1.2",
   "private": false,
-  "description": "WebGPU Tree and Terrain renderer that morphs deterministic 3D worlds into QR codes.",
+  "description": "WebGPU renderer for deterministic 3D QR codes with lazy Tree and Terrain models.",
   "keywords": [
     "3d",
+    "3d-qr-code",
+    "creative-coding",
     "qr-code",
+    "qr-code-generator",
+    "qrcode",
     "typescript",
     "webgpu",
     "wgsl"
